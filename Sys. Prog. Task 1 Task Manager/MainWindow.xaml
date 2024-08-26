@@ -52,10 +52,24 @@
     
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="0.2*"/>
+            <RowDefinition Height="0.15*"/>
             <RowDefinition/>
-        </Grid.RowDefinitions>
-
+        </Grid.RowDefinitions >
+        <Grid Background="#191919">
+            <Button Content="Add Black List" Width="150" HorizontalAlignment="Left" Background="Transparent" BorderBrush="Transparent" Foreground="White" FontSize="15" FontWeight="Bold" Click="AddBlackListClick"/>
+            <Button Width="120" Margin="400 0 0 0" Background="Transparent" BorderBrush="Transparent" Foreground="White" Click="Button_Click">
+                <StackPanel Orientation="Horizontal">
+                    <Image Source="RunTask.png" Width="30"/>
+                    <Label Content="Run new task" Foreground="White"/>
+                </StackPanel>
+            </Button>
+            <Button Width="120" Margin="650 0 0 0" Background="Transparent" BorderBrush="Transparent" Foreground="White" Click="Button_Click_1">
+                <StackPanel Orientation="Horizontal">
+                    <Image Source="Block.png" Width="25"/>
+                    <Label Content="End Task" Foreground="White"/>
+                </StackPanel>
+            </Button>
+        </Grid>
         <Grid Background="#191919" Grid.Row="1">
             <DataGrid Name="ProcessesDataGrid" ItemsSource="{Binding ProcessList}" Margin="10" AutoGenerateColumns="False" CanUserAddRows="False" HeadersVisibility="Column">
                 <DataGrid.Columns>
@@ -63,7 +77,8 @@
                     <DataGridTextColumn Header="Name" Binding="{Binding ProcessName}" Width="*" />
                     <DataGridTextColumn Header="Memory (MB)" Binding="{Binding PagedMemorySize}" Width="100"/>
                     <DataGridTextColumn Header="Handle Count" Binding="{Binding HandleCount}" Width="150"/>
-                    <DataGridTextColumn Header="Start Time" Binding="{Binding HandleCount}" Width="150"/>
+                    <DataGridTextColumn Header="Start Time" Binding="{Binding StartTime}" Width="150"/>
+                    <DataGridTextColumn Header="Status: Running" Binding="{Binding Responding}" Width="150"/>   
                 </DataGrid.Columns>
             </DataGrid>
         </Grid>
