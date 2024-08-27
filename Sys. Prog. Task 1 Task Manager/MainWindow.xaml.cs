@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
+using System.Text;
 using System.Windows;
 using System.Windows.Threading;
 
@@ -10,7 +11,7 @@ namespace Sys._Prog._Task_1_Task_Manager;
 public partial class MainWindow : Window, INotifyPropertyChanged
 {
     private ObservableCollection<Process> processList;
-    private List<Process> BlackList;
+    private List<string> BlackList = new();
 
 
     DispatcherTimer _timer;
@@ -32,11 +33,6 @@ public partial class MainWindow : Window, INotifyPropertyChanged
     public MainWindow()
     {
         ProcessList = new(Process.GetProcesses().ToList());
-        foreach (Process process in ProcessList)
-        {
-
-        }
-
         InitializeComponent();
         StartAutoRefresh();
         DataContext = this;
@@ -44,13 +40,15 @@ public partial class MainWindow : Window, INotifyPropertyChanged
 
     private void Button_Click(object sender, RoutedEventArgs e)
     {
-        RunNewTaskWindow runNewTaskWindow = new RunNewTaskWindow();
+        RunNewTaskWindow runNewTaskWindow = new RunNewTaskWindow(BlackList);
         runNewTaskWindow.ShowDialog();
 
     }
 
     private void Button_Click_1(object sender, RoutedEventArgs e)
     {
+        if ((ProcessesDataGrid.SelectedItem as Process) is null)
+            return;
         var p = ProcessesDataGrid.SelectedItem as Process;
 
         Process.GetProcessById(p.Id).Kill();
@@ -59,7 +57,33 @@ public partial class MainWindow : Window, INotifyPropertyChanged
 
     private void AddBlackListClick(object sender, RoutedEventArgs e)
     {
-        var p = ProcessesDataGrid.SelectedItem as Process;
-        BlackList.Add(p);
+        if (BlackListTextBox.Text.Length <= 0)
+            return;
+        var name = BlackListTextBox.Text;
+        BlackList.Add(name);
+        BlackListTextBox.Text = string.Empty;
+    }
+
+    private void RemoveBlackListClick(object sender, RoutedEventArgs e)
+    {
+        if (BlackListTextBox.Text.Length <= 0)
+            return;
+        BlackList.Remove(BlackListTextBox.Text);
+        BlackListTextBox.Text = string.Empty;
+    }
+
+    private void ShowBlackListClick(object sender, RoutedEventArgs e)
+    {
+        StringBuilder sb = new StringBuilder();
+        foreach (var item in BlackList)
+        {
+            sb.Append(item);
+            sb.Append(Environment.NewLine);
+        }
+        MessageBox.Show(sb.ToString());
+
+
+        //var ShowBlacKList = new ShowBlackListedProcessesWindow(BlackList);
+        //ShowBlacKList.ShowDialog();
     }
 }
